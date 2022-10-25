@@ -3,7 +3,6 @@ package heli.mario;
 
 import java.util.Collections;
 
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonBuilderFactory;
