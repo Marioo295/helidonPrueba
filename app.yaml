@@ -1,0 +1,59 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: demo-public-config
+  labels:
+    app: demo-config
+spec:
+  type: LoadBalancer
+  selector:
+    app: demo-config
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: demo-config
+  labels:
+    app: demo-config
+spec:
+  type: NodePort
+  selector:
+    app: demo-config
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-config
+  labels:
+    app: demo-config
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demo-config
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: demo-config
+        version: v1
+    spec:
+      containers:
+        - name: demo-config
+          image: mario/demo-config
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: demo
+              value: "Entorno 100% kubernetico"
+---
